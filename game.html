@@ -52,7 +52,8 @@ var canvas = document.getElementById('game');
 var context = canvas.getContext('2d');
 var grid = 16;
 var count = 0;
-  
+var foodcolours = ["#66b0ff", "#66b0ff", "#FF0000", "#FF0000","#32CD32","#32CD32", "#FFFF00", "#FFFF00"];  
+var foodcolournumber = 0;    
 var snake = {
   x: 160,
   y: 160,
@@ -102,7 +103,11 @@ function loop() {
   if (snake.cells.length > snake.maxCells) {
     snake.cells.pop();
   }
-  context.fillStyle = '#66b0ff';
+  context.fillStyle = foodcolours[foodcolournumber];
+    foodcolournumber = foodcolournumber + 1;
+    if (foodcolournumber > 6) {
+        foodcolournumber=0;
+    }
   context.fillRect(food.x, food.y, grid-1, grid-1);
   context.fillStyle = '#ffffff';
   snake.cells.forEach(function(cell, index) {
