@@ -104,18 +104,12 @@ var foodcolournumber = 0;
 var snake = {
   x: 160,
   y: 160,
-  
-  
   dx: grid,
   dy: 0,
-  
-  
   cells: [],
-  
-  
   maxCells: getRandomInt(0, 20)
-  
 };
+var originalCells = snake.maxCells;
 var food = {
   x: 320,
   y: 320
@@ -130,8 +124,9 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 function loop() {
+      document.getElementById("score").innerHTML = score + originalCells;
   requestAnimationFrame(loop);
-  document.getElementById("score").innerHTML = score + snake.maxCells;
+
   if (++count < 4) {
     return;
   }
@@ -172,10 +167,9 @@ context.fillRect(powerup.x, powerup.y, grid-1, grid-1);
     
     context.fillRect(cell.x, cell.y, grid-1, grid-1);  
     if (cell.x === food.x && cell.y === food.y) {
-     // snake.maxCells++;
         
-        snake.maxCells = snake.maxCells + 5
-        {score= score +1}
+        snake.maxCells++;
+        score += 1;
       food.x = getRandomInt(0, 25) * grid;
       food.y = getRandomInt(0, 25) * grid;
     }
@@ -194,6 +188,7 @@ context.fillRect(powerup.x, powerup.y, grid-1, grid-1);
         snake.y = 160;
         snake.cells = [];
         snake.maxCells = getRandomInt(1,20);
+        originalCells= snake.maxCells;
         snake.dx = grid;
         snake.dy = 0;
         food.x = getRandomInt(0, 25) * grid;
