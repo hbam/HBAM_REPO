@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Snake Game</title>
+  <style>
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+  body {
+       
+    background: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+      color: red;
+  }
+      
+     button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+      
+      p {
+  text-align: center;
+  font-size: 60px;
+  margin-top: 0px;
+}
+      
+  canvas {
+    border: 10px solid red;
+  }
+  </style>
+</head>
+<body>
+<canvas width="400" height="400" id="game"></canvas>
+    
+    
+    <center>
+ 
+      <h1> Snake Game </h1>
+        <h4>  Start with a random number of cells from 1 to 20! </h4> <br> <br> <br> <br> 
+        
+        
+    <br><br><br><br><br>
+        
+<!--
+        <h4>Your score</h4>
+      <div class="lblScore">
+        0
+-->
+    <br>
+    <button class="button" onmousedown="lightFunction()" onmouseup="darkFunction()">Light</button>
+        
+    </center>
+ 
+<!--    <p id="demo"></p>-->
+    
+<!--<label id="lblScore">0</label>   -->
+    
+    
+<!--
+    <button1 type="button" onclick="alert('You have selected easy mode.')">Easy Mode</button>
+    <button2 type="button" onclick="alert('You have selected medium mode.')">Medium Mode</button>
+    <button3 type="button" onclick="alert('You have selected hard mode.')">Hard Mode</button>
+-->
+    
+    
+    
+    
+<script>
+    
+    function lightFunction()
+{   
+document.body.style.backgroundColor= "white";
+}
+    
+    function darkFunction()
+{   
+document.body.style.backgroundColor= "black";
+}
+    
+    function rect(x,y,w,h) {
+	ctx.beginPath();
+	ctx.rect(x,y,w,h);
+	ctx.closePath();
+	ctx.fill();
+	ctx.stroke();
+}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+//    // Set the date we're counting down to
+////var countDownDate = new Date("Feb 5, 2019 15:37:25").getTime();
+//
+//// Update the count down every 1 second
+//var x = setInterval(function() {
+//
+//  // Get todays date and time
+//  var now = new Date().getTime();
+//    
+//  // Find the distance between now and the count down date
+//  var distance = minute;
+//    
+//  // Time calculations for days, hours, minutes and seconds
+//  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+//  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+//  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+//  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+//  var minute = seconds * 60
+//  // Output the result in an element with id="demo"
+//  document.getElementById("demo").innerHTML = days + "d " + hours + "h "
+//  + minutes + "m " + seconds + "s ";
+//    
+//  // If the count down is over, write some text 
+//  if (distance < 0) {
+//    clearInterval(x);
+//    document.getElementById("demo").innerHTML = "EXPIRED";
+//  }
+//}, 1000);
+//    
+//    
+//    
+    
+    
+    
+    
+    
+    var score=0 
+    
+    
+    function score() {
+        score = score+1;
+        document.getElementById('score').innerHTML= score;
+    };
+    
+    
+//    var lblScore = Document.getElementbyId.innerHTML(lblScore);
+//lblScore.innerHTML=Score;
+var canvas = document.getElementById('game');
+var context = canvas.getContext('2d');
+var grid = 16;
+var count = 0;
+var foodcolours = ["#66b0ff", "#66b0ff", "#FF0000", "#FF0000","#32CD32","#32CD32", "#FFFF00", "#FFFF00"]; 
+//    var powerupcolours = ["#ffffff", "#000000","#000000", "#000000","#000000","#000000", "#FFFF00", "#FFFF00"]; 
+    var powerupcolours = ["#000000","#000000", "#000000","#000000","#000000", "#000000","#000000", "#000000","#000000","#000000", "#000000","#000000", "#000000","#000000","#000000", "#000000","#000000", "#000000","#000000","#000000", "#000000","#000000", "#000000","#000000","#000000", "#000000","#000000", "#000000","#000000","#000000"]; 
+var foodcolournumber = 0;
+    var powerupcolournumber = 0;
+var snake = {
+  x: 160,
+  y: 160,
+  
+  
+  dx: grid,
+  dy: 0,
+  
+  
+  cells: [],
+  
+  
+  maxCells: getRandomInt(0, 20)
+};
+var food = {
+  x: 320,
+  y: 320
+};
+    
+var powerup = {
+  x: 160,
+  y: 160
+};
+    
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+function loop() {
+  requestAnimationFrame(loop);
+    
+  if (++count < 4) {
+    return;
+  }
+  count = 0;
+  context.clearRect(0,0,canvas.width,canvas.height);
+  snake.x += snake.dx;
+  snake.y += snake.dy;
+  if (snake.x < 0) {
+    snake.x = canvas.width - grid;
+  }
+  else if (snake.x >= canvas.width) {
+    snake.x = 0;
+  }
+  
+  if (snake.y < 0) {
+    snake.y = canvas.height - grid;
+  }
+  else if (snake.y >= canvas.height) {
+    snake.y = 0;
+  }
+  snake.cells.unshift({x: snake.x, y: snake.y});
+  if (snake.cells.length > snake.maxCells) {
+    snake.cells.pop();
+  }
+  context.fillStyle = foodcolours[foodcolournumber];
+    foodcolournumber = foodcolournumber + 1;
+    if (foodcolournumber > 6) {
+        foodcolournumber=0;
+    }
+  context.fillRect(food.x, food.y, grid-1, grid-1);
+context.fillRect(powerup.x, powerup.y, grid-1, grid-1);
+  context.fillStyle = powerupcolours[powerupcolournumber];
+    powerupcolournumber = powerupcolournumber + 1;
+    if (powerupcolournumber > 40) {
+        powerupcolournumber=0;
+    }
+  snake.cells.forEach(function(cell, index) {
+    
+    context.fillRect(cell.x, cell.y, grid-1, grid-1);  
+    if (cell.x === food.x && cell.y === food.y) {
+     // snake.maxCells++;
+        
+        snake.maxCells = snake.maxCells + 5
+        {score= score +1}
+      food.x = getRandomInt(0, 25) * grid;
+      food.y = getRandomInt(0, 25) * grid;
+    }
+      
+      context.fillRect(cell.x, cell.y, grid-1, grid-1);  
+    if (cell.x === powerup.x && cell.y === powerup.y) {
+     // snake.maxCells++;
+      powerup.x = getRandomInt(0, 25) * grid;
+      powerup.y = getRandomInt(0, 25) * grid;
+    }
+      
+    for (var i = index + 1; i < snake.cells.length; i++) {
+      
+      if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+        snake.x = 160;
+        snake.y = 160;
+        snake.cells = [];
+        snake.maxCells = getRandomInt(1,20);
+        snake.dx = grid;
+        snake.dy = 0;
+        food.x = getRandomInt(0, 25) * grid;
+        food.y = getRandomInt(0, 25) * grid;
+      }
+    }
+  });
+}
+ 
+document.addEventListener('keydown', function(e) {
+  if (e.which === 37 && snake.dx === 0) {
+    snake.dx = -grid;
+    snake.dy = 0;
+  }
+  
+  else if (e.which === 38 && snake.dy === 0) {
+    snake.dy = -grid;
+    snake.dx = 0;
+  }
+    
+  else if (e.which === 39 && snake.dx === 0) {
+    snake.dx = grid;
+    snake.dy = 0;
+  }
+    
+  else if (e.which === 40 && snake.dy === 0) {
+    snake.dy = grid;
+    snake.dx = 0;
+  }
+});
+    
+    
+    window.onkeydown = function(event){
+    if(event.keyCode === 32) {
+        event.preventDefault();
+        document.querySelector('a').click(); //This will trigger a click on the first <a> element.
+        document.body.style.backgroundColor= "white";
+    }
+};
+    
+    
+    
+    
+
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
