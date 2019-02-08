@@ -91,7 +91,7 @@ document.body.style.backgroundColor= "black";
 	ctx.stroke();
 }
  
-    var score=0 
+var score=0 
 var canvas = document.getElementById('game');
 var context = canvas.getContext('2d');
 var grid = 16;
@@ -100,7 +100,7 @@ var foodcolours = ["#66b0ff", "#66b0ff", "#FF0000", "#FF0000","#32CD32","#32CD32
 
     var powerupcolours = ["#000000","#000000", "#000000","#000000","#000000", "#000000","#000000", "#000000","#000000","#000000", "#000000","#000000", "#000000","#000000","#000000", "#000000","#000000", "#000000","#000000","#000000", "#000000","#000000", "#000000","#000000","#000000", "#000000","#000000", "#000000","#000000","#000000"]; 
 var foodcolournumber = 0;
-    var powerupcolournumber = 0;
+var powerupcolournumber = 0;
 var snake = {
   x: 160,
   y: 160,
@@ -169,14 +169,16 @@ context.fillRect(powerup.x, powerup.y, grid-1, grid-1);
     if (cell.x === food.x && cell.y === food.y) {
         
         snake.maxCells++;
-        score += 1;
+        score++;
       food.x = getRandomInt(0, 25) * grid;
       food.y = getRandomInt(0, 25) * grid;
     }
       
       context.fillRect(cell.x, cell.y, grid-1, grid-1);  
+      
     if (cell.x === powerup.x && cell.y === powerup.y) {
-     // snake.maxCells++;
+      snake.maxCells++;
+        score++;
       powerup.x = getRandomInt(0, 25) * grid;
       powerup.y = getRandomInt(0, 25) * grid;
     }
