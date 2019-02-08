@@ -14,7 +14,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-      color: red;
+      color: deepskyblue;
   }
       
      button {
@@ -35,7 +35,7 @@
 }
       
   canvas {
-    border: 10px solid red;
+    border: 10px solid deepskyblue;
   }
   </style>
 </head>
@@ -75,14 +75,15 @@
     
 <script>
     
+     
     function lightFunction()
 {   
-document.body.style.backgroundColor= "white";
+document.body.style.backgroundColor = "white";
 }
     
     function darkFunction()
 {   
-document.body.style.backgroundColor= "black";
+document.body.style.backgroundColor = "black";
 }
     
     function rect(x,y,w,h) {
@@ -92,6 +93,13 @@ document.body.style.backgroundColor= "black";
 	ctx.fill();
 	ctx.stroke();
 }
+var difficulty;
+var gameStarted = false;
+var gameOver = false;
+var startScreen = new Image();
+    startScreen.src = "snakeStartScreen.png";
+var gameOverScreen = new Image();
+    gameOverScreen.src = "snakeGameOver.png";
 var isWhite = false;
 var score=0; 
 var canvas = document.getElementById('game');
@@ -125,17 +133,36 @@ var powerup = {
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
+    function restart() {
+        snake.x = 160;
+        snake.y = 160;
+        snake.cells = [];
+        snake.maxCells = getRandomInt(1,20);
+        originalCells= snake.maxCells;
+        snake.dx = grid;
+        snake.dy = 0;
+        food.x = getRandomInt(0, 25) * grid;
+        food.y = getRandomInt(0, 25) * grid;
+        score = 0;
+    }
 function loop() {
-      document.getElementById("score").innerHTML = score + originalCells;
+    document.getElementById("score").innerHTML = score + originalCells;
   requestAnimationFrame(loop);
-
-  if (++count < 4) {
+  if (++count < 4 - difficulty) {
     return;
   }
   count = 0;
   context.clearRect(0,0,canvas.width,canvas.height);
+         if(!gameStarted) {
+          context.drawImage(startScreen, 0, 0, 400, 400); 
+    }
+    if(gameOver) {
+         context.drawImage(gameOverScreen, 0, 0, 400, 400);
+    }
+      if(gameStarted && !gameOver) {
   snake.x += snake.dx;
   snake.y += snake.dy;
+   
   if (snake.x < 0) {
     snake.x = canvas.width - grid;
   }
@@ -161,6 +188,8 @@ function loop() {
   context.fillRect(food.x, food.y, grid-1, grid-1);
 context.fillRect(powerup.x, powerup.y, grid-1, grid-1);
   context.fillStyle = powerupcolours[powerupcolournumber];
+    
+    
     powerupcolournumber = powerupcolournumber + 1;
     if (powerupcolournumber > 40) {
         powerupcolournumber=0;
@@ -199,28 +228,38 @@ context.fillRect(powerup.x, powerup.y, grid-1, grid-1);
     for (var i = index + 1; i < snake.cells.length; i++) {
       
       if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
-        snake.x = 160;
-        snake.y = 160;
-        snake.cells = [];
-        snake.maxCells = getRandomInt(1,20);
-        originalCells= snake.maxCells;
-        snake.dx = grid;
-        snake.dy = 0;
-        food.x = getRandomInt(0, 25) * grid;
-        food.y = getRandomInt(0, 25) * grid;
+          gameOver = true;
+            restart();
       }
     }
   });
+  }
 }
  
 document.addEventListener('keydown', function(e) {
     if (e.which == 32 && !isWhite) {
         isWhite = true;
-        document.body.style.backgroundColor= "white";
+        lightFunction();
     }
     else if (e.which == 32 && isWhite) {
         isWhite = false;
-        document.body.style.backgroundColor = "black";
+        darkFunction();
+    }
+    else if (e.which == 13 && !gameStarted && !gameOver) {
+        gameStarted = true;
+    }
+    else if (e.which == 13 && gameOver) {
+        gameOver = false;
+        gameStarted = false;
+    }
+    else if(e.which == 49 && !gameStarted) {
+        difficulty = 0;
+    }
+     else if(e.which == 50 && !gameStarted) {
+        difficulty = 2;
+    }
+     else if(e.which == 51 && !gameStarted) {
+        difficulty = 4;
     }
   else if (e.which === 37 && snake.dx === 0) {
     snake.dx = -grid;
@@ -242,8 +281,7 @@ document.addEventListener('keydown', function(e) {
     snake.dx = 0;
   }
 });
-    
-    
+
     window.onkeydown = function(event){
     if(event.keyCode === 32) {
         event.preventDefault();
@@ -251,7 +289,6 @@ document.addEventListener('keydown', function(e) {
         document.body.style.backgroundColor= "white";
     }
 };
-    
     
     
     
