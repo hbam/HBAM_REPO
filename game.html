@@ -47,6 +47,7 @@
  
       <h1> Snake Game </h1>
         <h4>  Start with a random number of cells from 1 to 20! </h4> <br> 
+        <h4> If the dark mode is on, you gain 2x the amount of score</h4>
         Your Score<h2 id="score">0</h2>
         
     <br><br><br><br><br>
@@ -57,7 +58,8 @@
         0
 -->
     <br>
-    <button class="button" onmousedown="lightFunction()" onmouseup="darkFunction()">Light</button>
+    <button class="button" onmousedown="lightFunction()" onmouseup="darkFunction()">Light</button><br>
+       <h5> (or press the spacebar to switch colours)<br></h5>
         
     </center>
  
@@ -90,8 +92,8 @@ document.body.style.backgroundColor= "black";
 	ctx.fill();
 	ctx.stroke();
 }
- 
-var score=0 
+var isWhite = false;
+var score=0; 
 var canvas = document.getElementById('game');
 var context = canvas.getContext('2d');
 var grid = 16;
@@ -167,9 +169,14 @@ context.fillRect(powerup.x, powerup.y, grid-1, grid-1);
     
     context.fillRect(cell.x, cell.y, grid-1, grid-1);  
     if (cell.x === food.x && cell.y === food.y) {
-        
-        snake.maxCells++;
-        score++;
+        if(isWhite) {
+            snake.maxCells++;
+            score++;
+        }
+        else if (!isWhite) {
+            snake.maxCells+= 2;
+            score+= 2;  
+        }
       food.x = getRandomInt(0, 25) * grid;
       food.y = getRandomInt(0, 25) * grid;
     }
@@ -177,8 +184,14 @@ context.fillRect(powerup.x, powerup.y, grid-1, grid-1);
       context.fillRect(cell.x, cell.y, grid-1, grid-1);  
       
     if (cell.x === powerup.x && cell.y === powerup.y) {
-      snake.maxCells++;
-        score++;
+       if(isWhite) {
+            snake.maxCells++;
+            score++;
+        }
+        else if (!isWhite) {
+            snake.maxCells+= 2;
+            score+= 2;  
+        }
       powerup.x = getRandomInt(0, 25) * grid;
       powerup.y = getRandomInt(0, 25) * grid;
     }
@@ -201,7 +214,15 @@ context.fillRect(powerup.x, powerup.y, grid-1, grid-1);
 }
  
 document.addEventListener('keydown', function(e) {
-  if (e.which === 37 && snake.dx === 0) {
+    if (e.which == 32 && !isWhite) {
+        isWhite = true;
+        document.body.style.backgroundColor= "white";
+    }
+    else if (e.which == 32 && isWhite) {
+        isWhite = false;
+        document.body.style.backgroundColor = "black";
+    }
+  else if (e.which === 37 && snake.dx === 0) {
     snake.dx = -grid;
     snake.dy = 0;
   }
