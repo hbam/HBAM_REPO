@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Snake Game</title>
-    <iframe src="snakeMusic.mp3" allow="autoplay" style="display:none" id="iframeAudio" loop="true"></iframe>
+    <iframe src="snakeMusic.mp3" allow="autoplay" style="display:none" id="gameMusic" loop="true"></iframe>
   <style>
   html, body {
     height: 100%;
@@ -146,6 +146,7 @@ function getRandomInt(min, max) {
         score = 0;
     }
 function loop() {
+   
     document.getElementById("score").innerHTML = score + originalCells;
   requestAnimationFrame(loop);
   if (++count < 4 - difficulty) {
